@@ -292,11 +292,11 @@ class DCGAN:
 						[self.G, self.d_loss, self.g_loss],
 						feed_dict={self.z: sample_z, self.images: sample_image, self.is_training: False}
 					)
-					save_images(samples, [8, 8], './samples/train_{:02d}_{:04d}.png'.format(epoch, idx))
+					save_images(samples, [8, 8], './samples/train_{:02d}_{:04d}.png'.format(epoch, count-1))
 					print("[Sample] d_loss: {:.8f}, g_loss: {:.8f}".format(d_loss, g_loss))
 
 				if count % 500 == 0:
-					self.save(self.checkpoint_dir, count)
+					self.save(self.checkpoint_dir)
 
 	def save(self, checkpoint_dir):
 		if not os.path.exists(checkpoint_dir):
