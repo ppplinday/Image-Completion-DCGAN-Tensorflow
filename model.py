@@ -165,7 +165,7 @@ def merge(images, size):
 def save_images(images, size, image_path):
 	images = (images + 1.) / 2.
 	img = merge(images, size)
-	return scipy.misc.imsave(path, (255*img).astype(np.uint8))
+	return scipy.misc.imsave(image_path, (255*img).astype(np.uint8))
 
 class DCGAN:
 	def __init__(self, sess):
