@@ -177,6 +177,7 @@ class DCGAN:
 		self.z = tf.random_uniform([self.batch_size, self.z_dim], minval=-1.0, maxval=1.0)
 
 		self.sample_size = 64
+		self.model_name = "DCGAN.model"
 
 		self.build()
 
