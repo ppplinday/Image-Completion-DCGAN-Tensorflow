@@ -200,7 +200,7 @@ class DCGAN:
 			 										 labels=tf.ones_like(self.D)))
 		self.d_loss_fake = tf.reduce_mean(
 			 tf.nn.sigmoid_cross_entropy_with_logits(logits=self.D_logits_,
-			 										 labels=tf.ones_like(self.D_)))
+			 										 labels=tf.zeros_like(self.D_)))
 		self.g_loss = tf.reduce_mean(
 			tf.nn.sigmoid_cross_entropy_with_logits(logits=self.D_logits_,
 			 										labels=tf.ones_like(self.D_)))
@@ -265,7 +265,6 @@ class DCGAN:
 				batch_files = data[idx * self.batch_size : (idx + 1) * self.batch_size]
 				batch_image = read_batch(batch_files)
 				batch_z = np.random.uniform(-1, 1, [self.batch_size, self.z_dim]).astype(np.float32)
-				print('xxxxxx')
 
 				# update D and twice G to make sure d_loss do not go to 0
 				_, summary_str = self.sess.run([d_optim, self.d_sum], 
@@ -291,7 +290,7 @@ class DCGAN:
 				if count % 100 == 1:
 					samples, d_loss, g_loss = self.sess.run(
 						[self.G, self.d_loss, self.g_loss],
-						feed_dict={self.z: sample_z, self.images: sample_images, self.is_training: False}
+						feed_dict={self.z: sample_z, self.images: sample_image, self.is_training: False}
 					)
 					save_images(samples, [8, 8], './samples/train_{:02d}_{:04d}.png'.format(epoch, idx))
 					print("[Sample] d_loss: {:.8f}, g_loss: {:.8f}".format(d_loss, g_loss))
