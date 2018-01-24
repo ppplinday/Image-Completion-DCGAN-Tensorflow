@@ -48,4 +48,9 @@ run for testing.
 ```
 python3 train_completion.py
 ```
-All the outcome is in file **completions** which we will generate in our code 
+All the outcome is in file **completions** which we will generate in our code.
+
+## Result
+### For DCGAN
+d_loss_fake
+![d_loss_fake](readme_picture/d_loss_fake) 
