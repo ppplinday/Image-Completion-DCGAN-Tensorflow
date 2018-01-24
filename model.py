@@ -238,7 +238,7 @@ class DCGAN:
 		self.lowers_images = tf.reduce_mean(tf.reshape(self.images,
 			[self.batch_size, 8, 8, 8, 8, 3]), [2, 4])
 
-		self.mask = tf.placeholder(tf.float32, [None, 64, 64, 3], name='mask')
+		self.mask = tf.placeholder(tf.float32, [64, 64, 3], name='mask')
 		self.lowers_mask = tf.placeholder(tf.float32, [None, 8, 8, 3], name='lowres_mask')
 		self.contextual_loss = tf.reduce_sum(
 			tf.contrib.layers.flatten(
@@ -362,9 +362,8 @@ class DCGAN:
 			u = min((idx + 1) * self.batch_size, num_img)
 			batch_size_z = u - l
 			batch_files = img[l : u]
-			print(batch_files)
 			batch = read_batch(batch_files)
-			print(batch.shape)
+
 			if batch_size_z < self.batch_size:
 				padSz = ((0, int(self.batch_size - batch_size_z)), (0,0), (0,0), (0,0))
 				batch = np.pad(batch, padSz, 'constant')
