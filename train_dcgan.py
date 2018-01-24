@@ -14,3 +14,5 @@ with tf.Session() as sess:
 	dcgan = DCGAN(sess)
 
 	dcgan.train_dcgan()
+
+	print('finish to train dcgan')

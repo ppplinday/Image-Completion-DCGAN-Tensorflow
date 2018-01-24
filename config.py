@@ -11,7 +11,7 @@ sample_dir = 'samples'
 lam = 0.1
 centerScale = 0.25 # should <= 0.5
 completion_dir = 'completions'
-nIter = 1000
+nIter = 5000
 c_beta1 = 0.9
 c_beta2 = 0.999
 lr = 0.01
