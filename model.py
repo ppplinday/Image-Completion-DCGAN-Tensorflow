@@ -116,16 +116,6 @@ xxxxxx
 (100, 1)
 '''
 
-# a = Generator()
-# import numpy as np
-# t = np.array(np.zeros(10000))
-# tt = t.reshape([100, 100])
-# print('xxx')
-# print(tt.shape)
-# ttt = a(tt)
-# b = Discriminator()
-# b(ttt)
-
 
 def imread(path):
 	return scipy.misc.imread(path, mode='RGB').astype(np.float)	
@@ -434,14 +424,3 @@ class DCGAN:
 			return True
 		else:
 			return False
-
-# lists = data_index()
-# print(lists)
-# batch = read_batch(lists)
-# print(batch.shape)
-# print(batch[2])
-
-# sess = tf.Session()
-# a = DCGAN(sess)
-# a.build()
-# print('okok')

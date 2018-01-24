@@ -32,4 +32,4 @@ for i in range(0, len(list)):
         face_image = image[top:bottom, left:right]
         pil_image = Image.fromarray(face_image)
         pil_image = pil_image.resize((64, 64), Image.ANTIALIAS)
-        pil_image.save('../image/%s'%imgName)
+        pil_image.save('../uncompletion_image/%s'%imgName)
