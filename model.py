@@ -349,7 +349,7 @@ class DCGAN:
 		num_img = len(img)
 		
 		batch_idxs = int(np.ceil(num_img/self.batch_size))
-		lowres_mask = np.zeros([8, 8, 3])
+		lowers_mask = np.zeros([8, 8, 3])
 
 		# center mask
 		mask = np.ones([64, 64, 3])
