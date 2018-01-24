@@ -8,6 +8,7 @@ import PIL
 import numpy as np
 from glob import glob
 import tensorflow as tf
+from six.moves import xrange
 
 import config
 
@@ -342,7 +343,7 @@ class DCGAN:
 		isloaded = self.load(self.checkpoint_dir)
 		assert(isloaded)
 
-		img = data_index(config.dataset)
+		img = data_index(config.uncompletion_image_dir)
 		num_img = len(img)
 		print(num_img)
 		print(img)
