@@ -69,8 +69,10 @@ the example
 
 ![ ](readme_picture/before.png)
 
-the example with mask
+the example with mask  
+
 ![ ](readme_picture/masked.png)
 
-after completion
+after completion  
+
 ![ ](readme_picture/result.png)
