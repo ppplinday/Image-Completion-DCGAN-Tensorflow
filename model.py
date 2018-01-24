@@ -342,7 +342,10 @@ class DCGAN:
 		isloaded = self.load(self.checkpoint_dir)
 		assert(isloaded)
 
-		num_img = data_index(config.dataset)
+		img = data_index(config.dataset)
+		num_img = len(img)
+		print(num_img)
+		print(img)
 		batch_idxs = int(np.ceil(num_img/self.batch_size))
 		lowres_mask = np.zeros([8, 8, 3])
 
@@ -356,7 +359,7 @@ class DCGAN:
 			l = idx * self.batch_size
 			u = min((idx + 1) * self.batch_size, num_img)
 			batch_size_z = u - l
-			batch_files = config.img[l : u]
+			batch_files = img[l : u]
 			batch = read_batch(batch_files)
 			if batchSz < self.batch_size:
 				padSz = ((0, int(self.batch_size-batchSz)), (0,0), (0,0), (0,0))
