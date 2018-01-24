@@ -129,8 +129,8 @@ xxxxxx
 def imread(path):
 	return scipy.misc.imread(path, mode='RGB').astype(np.float)	
 
-def data_index(shuffle=False):
-	list = os.listdir(config.dataset)
+def data_index(data_dir, shuffle=False):
+	list = os.listdir(data_dir)
 	lists = []
 	for i in range(0, len(list)):
 		imgName = os.path.basename(list[i])
@@ -178,6 +178,8 @@ class DCGAN:
 
 		self.sample_size = 64
 		self.model_name = "DCGAN.model"
+
+		self.lam = config.lam
 
 		self.build()
 
@@ -227,8 +229,27 @@ class DCGAN:
 		self.checkpoint_dir = config.checkpoint_dir
 		self.saver = tf.train.Saver(max_to_keep=1)
 
+		# for completion
+		self.lowres_G = tf.reduce_mean(tf.reshape(self.G,
+			[self.batch_size, 8, 8, 8, 8, 3]), [2, 4])
+		self.lowres_images = tf.reduce_mean(tf.reshape(self.images,
+			[self.batch_size, 8, 8, 8, 8, 3]), [2, 4])
+
+		self.mask = tf.placeholder(tf.float32, [None, 64, 64, 3], name='mask')
+		self.lowres_mask = tf.placeholder(tf.float32, [None, 8, 8, 3], name='lowres_mask')
+		self.contextual_loss = tf.reduce_sum(
+			tf.contrib.layers.flatten(
+				tf.abs(tf.multiply(self.mask, self.G) - tf.multiply(self.mask, self.images))), 1)
+		self.contextual_loss += tf.reduce_sum(
+			tf.contrib.layers.flatten(
+				tf.abs(tf.multiply(self.lowers_mask, self.lowers_G) - tf.multiply(self.lowers_mask, self.lowers_images))), 1)
+		self.perceptual_loss = self.g_loss
+		self.complete_loss = self.contextual_loss + self.lam * self.perceptual_loss
+		self.grad_complete_loss = tf.gradients(self.complete_loss, self.z)
+
+
 	def train_dcgan(self):
-		data = data_index()
+		data = data_index(config.dataset)
 
 		d_optim = tf.train.AdamOptimizer(config.learning_rate, beta1=config.beta1).minimize(self.d_loss, var_list=self.d_vars)
 		g_optim = tf.train.AdamOptimizer(config.learning_rate, beta1=config.beta1).minimize(self.g_loss, var_list=self.g_vars)
@@ -298,6 +319,107 @@ class DCGAN:
 
 				if count % 500 == 0:
 					self.save(self.checkpoint_dir)
+					print("Save the checkpoint for the count: {:4d}".format(count))
+
+	def completion(self):
+		if not os.path.exists(config.completion_dir):
+			os.makedirs(config.completion_dir)
+		p = os.path.join(config.completion_dir, 'hats_imgs')
+		if not os.path.exists(p):
+			os.makedirs(p)
+		p = os.path.join(config.completion_dir, 'completed')
+		if not os.path.exists(p):
+			os.makedirs(p)
+		p = os.path.join(config.completion_dir, 'logs')
+		if not os.path.exists(p):
+			os.makedirs(p)
+
+		try:
+			tf.global_variables_initializer().run()
+		except:
+			tf.initialize_all_variables().run()
+
+		isloaded = self.load(self.checkpoint_dir)
+		assert(isLoaded)
+
+		num_img = data_index(config.dataset)
+		batch_idxs = int(np.ceil(num_img/self.batch_size))
+		lowres_mask = np.zeros([8, 8, 3])
+
+		# center mask
+		mask = np.ones([64, 64, 3])
+		l = int(64 * config.centerScale)
+		u = int(64 * (1. - config.centerScale))
+		mask[l:u, l:u, :] = 0.0
+
+		for idx in xrange(0, batch_idxs):
+			l = idx * self.batch_size
+			u = min((idx + 1) * self.batch_size, num_img)
+			batch_size_z = u - l
+			batch_files = config.img[l : u]
+			batch = read_batch(batch_files)
+			if batchSz < self.batch_size:
+				padSz = ((0, int(self.batch_size-batchSz)), (0,0), (0,0), (0,0))
+				batch = np.pad(batch, padSz, 'constant')
+				batch = batch.astype(np.float32)
+
+			z = np.random.uniform(-1, 1, size=(self.batch_size, self.z_dim))
+
+			nRows = np.ceil(batch_size_z / 8)
+			nCols = min(8, batch_size_z)
+			save_images(batch_images[:batch_size_z,:,:,:], [nRows, nCols],
+				os.path.join(config.completion_dir, 'before.png'))
+			masked_images = np.multiply(batch_images, mask)
+			save_images(masked_images[:batch_size_z,:,:,:], [nRows, nCols],
+				os.path.join(config.completion_dir, 'masked.png'))
+
+			# for Adam
+			m = 0
+			v = 0
+
+			for img in range(batch_size_z):
+				with open(os.path.join(config.completion_dir, 'logs/hats_{:02d}.log'.format(img)), 'a') as f:
+					f.write('iter loss ' + ' '.join(['z{}'.format(zi) for zi in range(self.z_dim)]) + '\n')
+
+			for i in xrange(config.nIter):
+				loss, g, G_imgs, lowres_G_imgs = self.sess.run(
+					[self.complete_loss, self.grad_complete_loss, self.G, self.lowres_G],
+					feed_dict={
+						self.z: z,
+						self.mask: mask,
+						self.lowres_mask: lowres_mask,
+						self.images: batch,
+						self.is_training: False
+					})
+
+				for img in range(batch_size_z):
+					with open(os.path.join(config.completion_dir, 'logs/hats_{:02d}.log'.format(img)), 'ab') as f:
+						f.write('{} {} '.format(i, loss[img]).encode())
+						np.savetxt(f, z[img:img+1])
+
+				if i % 50 == 0:
+					print(i, np.mean(loss[0:batch_size_z]))
+					imgName = os.path.join(config.completion_dir, 'hats_imgs/{:04d}.png'.format(i))
+					nRows = np.ceil(batchSz/8)
+					nCols = min(8, batchSz)
+					save_images(G_imgs[:batch_size_z,:,:,:], [nRows,nCols], imgName)
+
+					inv_masked_hat_images = np.multiply(G_imgs, 1.0 - mask)
+					completed = masked_images + inv_masked_hat_images
+
+					imgName = os.path.join(config.completion_dir, 'completed/{:04d}.png'.format(i))
+					save_images(completed[:batch_size_z,:,:,:], [nRows,nCols], imgName)
+
+				# optim Adam
+				m_prev = np.copy(m)
+				v_prev = np.copy(v)
+				m = config.c_beta1 * m_prev + (1 - config.c_beta1) * g[0]
+				v = config.c_beta2 * v_prev + (1 - config.c_beta2) * np.multiply(g[0], g[0])
+				m_hat = m / (1 - config.c_beta1 ** (i + 1))
+				v_hat = v / (1 - config.c_beta2 ** (i + 1))
+				z += - np.true_divide(config.lr * m_hat, (np.sqrt(v_hat) + config.eps))
+				z = np.clip(z, -1, 1)
+
 
 	def save(self, checkpoint_dir):
 		if not os.path.exists(checkpoint_dir):
