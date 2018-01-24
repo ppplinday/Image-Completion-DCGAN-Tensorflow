@@ -321,7 +321,7 @@ class DCGAN:
 					self.save(self.checkpoint_dir)
 					print("Save the checkpoint for the count: {:4d}".format(count))
 
-	def completion(self):
+	def train_completion(self):
 		if not os.path.exists(config.completion_dir):
 			os.makedirs(config.completion_dir)
 		p = os.path.join(config.completion_dir, 'hats_imgs')
