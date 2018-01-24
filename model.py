@@ -407,7 +407,7 @@ class DCGAN:
 
 			if i % 50 == 0:
 				print(i, np.mean(loss[0:batch_size_z]))
-				print(g.shape)
+				print(g)
 				print("Iter: [{:4d}/{:4d}] time: {:4.4f}, mean_loss: {:.8f}, mean_g: {:.8f}".format(
 					i, config.nIter, time.time() - start_time, np.mean(loss[0:batch_size_z]), np.mean(g[0:batch_size_z])))
 				imgName = os.path.join(config.completion_dir, 'hats_imgs/{:04d}.png'.format(i))
