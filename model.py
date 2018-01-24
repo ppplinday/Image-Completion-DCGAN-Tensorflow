@@ -406,8 +406,8 @@ class DCGAN:
 				if i % 50 == 0:
 					print(i, np.mean(loss[0:batch_size_z]))
 					imgName = os.path.join(config.completion_dir, 'hats_imgs/{:04d}.png'.format(i))
-					nRows = np.ceil(batchSz/8)
-					nCols = min(8, batchSz)
+					nRows = np.ceil(batch_size_z/8)
+					nCols = min(8, batch_size_z)
 					save_images(G_imgs[:batch_size_z,:,:,:], [nRows,nCols], imgName)
 
 					inv_masked_hat_images = np.multiply(G_imgs, 1.0 - mask)
