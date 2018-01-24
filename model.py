@@ -340,7 +340,7 @@ class DCGAN:
 			tf.initialize_all_variables().run()
 
 		isloaded = self.load(self.checkpoint_dir)
-		assert(isLoaded)
+		assert(isloaded)
 
 		num_img = data_index(config.dataset)
 		batch_idxs = int(np.ceil(num_img/self.batch_size))
