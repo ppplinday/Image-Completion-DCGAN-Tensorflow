@@ -53,4 +53,23 @@ All the outcome is in file **completions** which we will generate in our code.
 ## Result
 ### For DCGAN
 d_loss_fake
-![d_loss_fake](readme_picture/d_loss_fake.png) 
+![ ](readme_picture/d_loss_fake.png) 
+
+d_loss_real
+![ ](readme_picture/d_loss_real.png) 
+
+d_loss
+![ ](readme_picture/d_loss.png) 
+
+g_loss
+![ ](readme_picture/g_loss.png) 
+
+### For completion
+the example
+![ ](readme_picture/before.png)
+
+the example with mask
+![ ](readme_picture/masked.png)
+
+after completion
+![ ](readme_picture/result.png)
