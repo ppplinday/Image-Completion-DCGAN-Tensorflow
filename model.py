@@ -236,7 +236,7 @@ class DCGAN:
 			[self.batch_size, 8, 8, 8, 8, 3]), [2, 4])
 
 		self.mask = tf.placeholder(tf.float32, [None, 64, 64, 3], name='mask')
-		self.lowres_mask = tf.placeholder(tf.float32, [None, 8, 8, 3], name='lowres_mask')
+		self.lowers_mask = tf.placeholder(tf.float32, [None, 8, 8, 3], name='lowres_mask')
 		self.contextual_loss = tf.reduce_sum(
 			tf.contrib.layers.flatten(
 				tf.abs(tf.multiply(self.mask, self.G) - tf.multiply(self.mask, self.images))), 1)

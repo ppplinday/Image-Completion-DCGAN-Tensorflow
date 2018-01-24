@@ -16,4 +16,4 @@ c_beta1 = 0.9
 c_beta2 = 0.999
 lr = 0.01
 eps = 1e-8
-uncompletion_image_dir = ''
+uncompletion_image_dir = 'uncompletion_image'
