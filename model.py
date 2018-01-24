@@ -230,9 +230,9 @@ class DCGAN:
 		self.saver = tf.train.Saver(max_to_keep=1)
 
 		# for completion
-		self.lowres_G = tf.reduce_mean(tf.reshape(self.G,
+		self.lowers_G = tf.reduce_mean(tf.reshape(self.G,
 			[self.batch_size, 8, 8, 8, 8, 3]), [2, 4])
-		self.lowres_images = tf.reduce_mean(tf.reshape(self.images,
+		self.lowers_images = tf.reduce_mean(tf.reshape(self.images,
 			[self.batch_size, 8, 8, 8, 8, 3]), [2, 4])
 
 		self.mask = tf.placeholder(tf.float32, [None, 64, 64, 3], name='mask')
