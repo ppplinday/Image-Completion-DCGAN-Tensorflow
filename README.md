@@ -65,7 +65,8 @@ g_loss
 ![ ](readme_picture/g_loss.png) 
 
 ### For completion
-the example
+the example  
+
 ![ ](readme_picture/before.png)
 
 the example with mask
