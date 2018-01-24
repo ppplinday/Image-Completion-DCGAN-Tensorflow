@@ -388,11 +388,11 @@ class DCGAN:
 
 			for i in xrange(config.nIter):
 				loss, g, G_imgs, lowres_G_imgs = self.sess.run(
-					[self.complete_loss, self.grad_complete_loss, self.G, self.lowres_G],
+					[self.complete_loss, self.grad_complete_loss, self.G, self.lowers_G],
 					feed_dict={
 						self.z: z,
 						self.mask: mask,
-						self.lowres_mask: lowres_mask,
+						self.lowers_mask: lowers_mask,
 						self.images: batch,
 						self.is_training: False
 					})
