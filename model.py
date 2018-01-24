@@ -345,8 +345,7 @@ class DCGAN:
 
 		img = data_index(config.uncompletion_image_dir)
 		num_img = len(img)
-		print(num_img)
-		print(img)
+		
 		batch_idxs = int(np.ceil(num_img/self.batch_size))
 		lowres_mask = np.zeros([8, 8, 3])
 
@@ -371,9 +370,9 @@ class DCGAN:
 
 			nRows = np.ceil(batch_size_z / 8)
 			nCols = min(8, batch_size_z)
-			save_images(batch_images[:batch_size_z,:,:,:], [nRows, nCols],
+			save_images(batch[:batch_size_z,:,:,:], [nRows, nCols],
 				os.path.join(config.completion_dir, 'before.png'))
-			masked_images = np.multiply(batch_images, mask)
+			masked_images = np.multiply(batch, mask)
 			save_images(masked_images[:batch_size_z,:,:,:], [nRows, nCols],
 				os.path.join(config.completion_dir, 'masked.png'))
 
