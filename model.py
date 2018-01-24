@@ -333,9 +333,6 @@ class DCGAN:
 		p = os.path.join(config.completion_dir, 'completed')
 		if not os.path.exists(p):
 			os.makedirs(p)
-		p = os.path.join(config.completion_dir, 'logs')
-		if not os.path.exists(p):
-			os.makedirs(p)
 
 		try:
 			tf.global_variables_initializer().run()
@@ -383,10 +380,6 @@ class DCGAN:
 		m = 0
 		v = 0
 
-		for img in range(batch_size_z):
-			with open(os.path.join(config.completion_dir, 'logs/hats_{:02d}.log'.format(img)), 'a') as f:
-				f.write('iter loss ' + ' '.join(['z{}'.format(zi) for zi in range(self.z_dim)]) + '\n')
-
 		start_time = time.time()
 
 		for i in xrange(config.nIter):
@@ -400,13 +393,8 @@ class DCGAN:
 					self.is_training: False
 				})
 
-			for img in range(batch_size_z):
-				with open(os.path.join(config.completion_dir, 'logs/hats_{:02d}.log'.format(img)), 'ab') as f:
-					f.write('{} {} '.format(i, loss[img]).encode())
-					np.savetxt(f, z[img:img+1])
-
 			if i % 50 == 0:
-				
+
 				print("Iter: [{:4d}/{:4d}] time: {:4.4f}, mean_loss: {:.8f}, mean_g: {:.8f}".format(
 					i, config.nIter, time.time() - start_time, np.mean(loss[0:batch_size_z]), np.mean(g[0:batch_size_z])))
 				imgName = os.path.join(config.completion_dir, 'hats_imgs/{:04d}.png'.format(i))
