@@ -8,4 +8,4 @@ import tensorflow as tf
 with tf.Session() as sess:
 	dcgan = DCGAN(sess)
 
-	dcgan.completed()
+	dcgan.train_completion()
