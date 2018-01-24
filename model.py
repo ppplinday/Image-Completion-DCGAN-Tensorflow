@@ -387,6 +387,8 @@ class DCGAN:
 			with open(os.path.join(config.completion_dir, 'logs/hats_{:02d}.log'.format(img)), 'a') as f:
 				f.write('iter loss ' + ' '.join(['z{}'.format(zi) for zi in range(self.z_dim)]) + '\n')
 
+		start_time = time.time()
+
 		for i in xrange(config.nIter):
 			loss, g, G_imgs, lowres_G_imgs = self.sess.run(
 				[self.complete_loss, self.grad_complete_loss, self.G, self.lowers_G],
@@ -405,6 +407,9 @@ class DCGAN:
 
 			if i % 50 == 0:
 				print(i, np.mean(loss[0:batch_size_z]))
+				print(g.shape)
+				print("Iter: [{:4d}/{:4d}] time: {:4.4f}, mean_loss: {:.8f}, mean_g: {:.8f}".format(
+					i, config.nIter, time.time() - start_time, np.mean(loss[0:batch_size_z], np.mean(g[0:batch_size_z]))
 				imgName = os.path.join(config.completion_dir, 'hats_imgs/{:04d}.png'.format(i))
 				nRows = np.ceil(batch_size_z/8)
 				nCols = min(8, batch_size_z)
