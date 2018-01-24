@@ -362,8 +362,8 @@ class DCGAN:
 			batch_size_z = u - l
 			batch_files = img[l : u]
 			batch = read_batch(batch_files)
-			if batchSz < self.batch_size:
-				padSz = ((0, int(self.batch_size-batchSz)), (0,0), (0,0), (0,0))
+			if batch_size_z < self.batch_size:
+				padSz = ((0, int(self.batch_size - batch_size_z)), (0,0), (0,0), (0,0))
 				batch = np.pad(batch, padSz, 'constant')
 				batch = batch.astype(np.float32)
 
