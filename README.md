@@ -16,7 +16,7 @@ pip3 install face_recognition
 And all the config we can change in file **config.py**.
 
 ### Data
-We use [CeleBbA Dataset](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html), then we need to download img_align_celeba.zip and
+We use [CelebA Dataset](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html), then we need to download img_align_celeba.zip and
 unzip all the images to the file **img_align_celeba**.
 Choose 300 pictures randomly as testing pictures and move them to file **pre_uncompletion_image**.
 Because all the picture is original people pictures and our model need the face pictures whose shape is 64 * 64 * 3,
