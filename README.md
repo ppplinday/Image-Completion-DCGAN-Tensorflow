@@ -40,7 +40,7 @@ To train dcgan, we need to run:
 ```
 python3 train_dcgan.py
 ```
-We will train 20 epoch and this is enough for our purpose.
+We will train 20 epoch in DCGAN and this is enough for our purpose.
 
 ### Train_completion
 After trained DCGAN, we need to train z and for my code, I will randomly choose 64 image in the file **pre_uncompletion_image** and 
